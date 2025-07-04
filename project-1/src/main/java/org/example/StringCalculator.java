@@ -8,10 +8,12 @@ public class StringCalculator {
             return 0;
         }
 
-        String[] numberArray = numbers.split(",");
+        String[] numberArray = numbers.split(",|\n");
         int sum = 0;
         for (String number : numberArray) {
-            sum += Integer.parseInt(number);
+            if (!number.trim().isEmpty()) {
+                sum += Integer.parseInt(number.trim());
+            }
         }
         return sum;
     }
