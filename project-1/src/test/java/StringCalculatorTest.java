@@ -1,43 +1,106 @@
 import org.example.StringCalculator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StringCalculatorTest {
 
+    private StringCalculator calculator;
+
+    @BeforeEach
+    void setUp() {
+        calculator = new StringCalculator();
+    }
+
     @Test
     void testEmptyStringReturnsZero() {
-        StringCalculator calculator = new StringCalculator();
         assertEquals(0, calculator.add(""));
     }
 
     @Test
+    void testNullStringReturnsZero() {
+        assertEquals(0, calculator.add(null));
+    }
+
+    @Test
     void testSingleNumberReturnsThatNumber() {
-        StringCalculator calculator = new StringCalculator();
         assertEquals(1, calculator.add("1"));
         assertEquals(5, calculator.add("5"));
     }
+
     @Test
     void testTwoNumbersReturnSum() {
-        StringCalculator calculator = new StringCalculator();
         assertEquals(6, calculator.add("1,5"));
         assertEquals(10, calculator.add("4,6"));
     }
+
     @Test
     void testMultipleNumbersReturnSum() {
-        StringCalculator calculator = new StringCalculator();
         assertEquals(15, calculator.add("1,2,3,4,5"));
         assertEquals(21, calculator.add("1,2,3,4,5,6"));
     }
+
     @Test
     void testNewLineDelimiterBetweenNumbers() {
-        StringCalculator calculator = new StringCalculator();
         assertEquals(6, calculator.add("1\n2,3"));
         assertEquals(10, calculator.add("1\n2\n3,4"));
     }
+
     @Test
     void testCustomDelimiter() {
-        StringCalculator calculator = new StringCalculator();
         assertEquals(3, calculator.add("//;\n1;2"));
         assertEquals(10, calculator.add("//|\n1|2|3|4"));
     }
+
+    @Test
+    void testNegativeNumberThrowsException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            calculator.add("-1,2");
+        });
+        assertEquals("negative numbers not allowed -1", exception.getMessage());
+    }
+
+    @Test
+    void testMultipleNegativeNumbersThrowsExceptionWithAllNumbers() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            calculator.add("-1,2,-3");
+        });
+        assertEquals("negative numbers not allowed -1,-3", exception.getMessage());
+    }
+
+    @Test
+    void testCustomDelimiterWithNegativeNumbers() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            calculator.add("//;\n-1;2;-3");
+        });
+        assertEquals("negative numbers not allowed -1,-3", exception.getMessage());
+    }
+
+    @Test
+    void testCustomDelimiterWithNewlinesAndPositiveNumbers() {
+        assertEquals(10, calculator.add("//|\n1|2\n3|4"));
+    }
+
+    @Test
+    void testCustomDelimiterWithNewlinesAndNegativeNumbers() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            calculator.add("//|\n-1|2\n-3|4");
+        });
+        assertEquals("negative numbers not allowed -1,-3", exception.getMessage());
+    }
+
+    @Test
+    void testAllCombinationsWork() {
+        assertEquals(0, calculator.add(""));
+        assertEquals(5, calculator.add("5"));
+        assertEquals(6, calculator.add("1,5"));
+        assertEquals(15, calculator.add("1,2,3,4,5"));
+        assertEquals(6, calculator.add("1\n2,3"));
+        assertEquals(3, calculator.add("//;\n1;2"));
+        assertEquals(10, calculator.add("//|\n1|2\n3|4"));
+
+        assertThrows(IllegalArgumentException.class, () -> calculator.add("-1,2"));
+        assertThrows(IllegalArgumentException.class, () -> calculator.add("//;\n-1;2;-3"));
+    }
+
 }
