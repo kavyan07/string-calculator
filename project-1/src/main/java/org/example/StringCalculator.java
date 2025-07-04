@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.regex.Pattern;
+
 public class StringCalculator {
 
 
@@ -8,7 +10,17 @@ public class StringCalculator {
             return 0;
         }
 
-        String[] numberArray = numbers.split(",|\n");
+        String delimiter = ",|\n";
+        String numbersToProcess = numbers;
+
+        if (numbers.startsWith("//")) {
+            int delimiterEndIndex = numbers.indexOf('\n');
+            String delimiterSection = numbers.substring(2, delimiterEndIndex);
+            delimiter = Pattern.quote(delimiterSection);
+            numbersToProcess = numbers.substring(delimiterEndIndex + 1);
+        }
+
+        String[] numberArray = numbersToProcess.split(delimiter);
         int sum = 0;
         for (String number : numberArray) {
             if (!number.trim().isEmpty()) {
