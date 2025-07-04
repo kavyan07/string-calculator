@@ -9,4 +9,11 @@ public class StringCalculatorTest {
         StringCalculator calculator = new StringCalculator();
         assertEquals(0, calculator.add(""));
     }
+
+    @Test
+    void testSingleNumberReturnsThatNumber() {
+        StringCalculator calculator = new StringCalculator();
+        assertEquals(1, calculator.add("1"));
+        assertEquals(5, calculator.add("5"));
+    }
 }
