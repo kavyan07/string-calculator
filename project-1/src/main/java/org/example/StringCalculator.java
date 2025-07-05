@@ -24,43 +24,54 @@ public class StringCalculator {
             delimiter = Pattern.quote(delimiterSection) + "|,|\n";
             numbersToProcess = numbers.substring(delimiterEndIndex + 1);
         }
-
         String[] numberArray = numbersToProcess.split(delimiter);
-        List<Integer> negativeNumbers = new ArrayList<>();
-        int sum = 0;
-
-        for (String number : numberArray) {
-            String trimmedNumber = number.trim();
-            if (!trimmedNumber.isEmpty()) {
-                try {
-                    int num = Integer.parseInt(trimmedNumber);
-                    if (num < 0) {
-                        negativeNumbers.add(num);
-                    } else {
-                        sum += num;
-                    }
-                } catch (NumberFormatException e) {
-                    throw new IllegalArgumentException("Invalid number format: " + trimmedNumber);
-                }
-            }
-        }
-
-        if (!negativeNumbers.isEmpty()) {
-            StringBuilder message = new StringBuilder("negative numbers not allowed ");
-            for (int i = 0; i < negativeNumbers.size(); i++) {
-                message.append(negativeNumbers.get(i));
-                if (i < negativeNumbers.size() - 1) {
-                    message.append(",");
-                }
-            }
-            throw new IllegalArgumentException(message.toString());
-        }
-
-        return sum;
+        return calculateSum(numberArray);
     }
+        // Update StringCalculator.java - modify calculateSum method
+
+        private int calculateSum (String[]numberArray){
+            List<Integer> negativeNumbers = new ArrayList<>();
+            int sum = 0;
+
+            for (String number : numberArray) {
+                String trimmedNumber = number.trim();
+                if (!trimmedNumber.isEmpty()) {
+                    try {
+                        int num = Integer.parseInt(trimmedNumber);
+
+                        if (num < 0) {
+                            negativeNumbers.add(num);
+                        } else if (num <= 1000) {  //  Ignore numbers > 1000
+                            sum += num;
+                        }
+                        // Numbers > 1000 are ignored (not added to sum)
+
+                    } catch (NumberFormatException e) {
+                        throw new IllegalArgumentException("Invalid number format: " + trimmedNumber);
+                    }
+                }
+            }
+
+            // Check for negative numbers (existing code)
+            if (!negativeNumbers.isEmpty()) {
+                StringBuilder message = new StringBuilder("negative numbers not allowed ");
+                for (int i = 0; i < negativeNumbers.size(); i++) {
+                    message.append(negativeNumbers.get(i));
+                    if (i < negativeNumbers.size() - 1) {
+                        message.append(",");
+                    }
+                }
+                throw new IllegalArgumentException(message.toString());
+            }
+
+            return sum;
+        }
+
+
 
 
     public static void main(String[] args) {
         System.out.println("Hello, World!");
     }
+
 }

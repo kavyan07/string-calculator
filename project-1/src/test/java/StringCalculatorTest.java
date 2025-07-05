@@ -102,5 +102,15 @@ public class StringCalculatorTest {
         assertThrows(IllegalArgumentException.class, () -> calculator.add("-1,2"));
         assertThrows(IllegalArgumentException.class, () -> calculator.add("//;\n-1;2;-3"));
     }
+    // Add to StringCalculatorTest.java
+
+    @Test
+    void testNumbersBiggerThan1000AreIgnored() {
+        assertEquals(2, calculator.add("2,1001"));           // 1001 ignored
+        assertEquals(1002, calculator.add("1000,1001,2"));   // 1001 ignored, 1000 included
+        assertEquals(6, calculator.add("1,5,1001"));         // 1001 ignored
+        assertEquals(0, calculator.add("1001"));             // Only 1001, ignored
+        assertEquals(1000, calculator.add("1000"));          // 1000 is included
+    }
 
 }
