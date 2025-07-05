@@ -112,5 +112,19 @@ public class StringCalculatorTest {
         assertEquals(0, calculator.add("1001"));             // Only 1001, ignored
         assertEquals(1000, calculator.add("1000"));          // 1000 is included
     }
+    // Add to StringCalculatorTest.java
+
+    @Test
+    void testLongDelimiters() {
+        assertEquals(6, calculator.add("//[***]\n1***2***3"));
+        assertEquals(10, calculator.add("//[abc]\n1abc2abc3abc4"));
+        assertEquals(15, calculator.add("//[hello]\n1hello2hello3hello4hello5"));
+    }
+
+    @Test
+    void testLongDelimitersWithNumbersOver1000() {
+        assertEquals(6, calculator.add("//[***]\n1***5***1001"));      // 1001 ignored
+        assertEquals(1006, calculator.add("//[abc]\n1000abc5abc1abc1001")); // 1001 ignored
+    }
 
 }
