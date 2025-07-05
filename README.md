@@ -60,7 +60,7 @@ int Add(String numbers)
 ## ️ Project Structure
 
 ```plaintext
-string-calculator/
+project-1/
 ├── src/
 │   ├── main/java/org/example/
 │   │   └── StringCalculator.java
